@@ -5,4 +5,4 @@
     state: present
   become: true
   register: result
-  until: result is successful
+  until: result is succeeded
