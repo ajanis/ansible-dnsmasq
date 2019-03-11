@@ -19,62 +19,51 @@ dnsmasq_conditional_forwarders:
 # Defines if DNSMASQ should be configured
 dnsmasq_config: false
 
-# Define custom domains per subnet, ip range, etc.
-dnsmasq_custom_domains:
-  []
-  # - domain:                        "test.{{ dnsmasq_pri_domain_name }}"
-  #   network:
-  #     - 192.168.0.0/24 # Define as subnet
-  #     # - 192.168.0.100,192.168.1.100 # Define as range
+# DHCP Boot Config
+dnsmasq_dhcp_boot: 'pxelinux.0,{{ inventory_hostname }},{{ dnsmasq_pri_bind_address }}'
 
-dnsmasq_dhcp_boot: "pxelinux.0,{{ inventory_hostname }},{{ dnsmasq_pri_bind_address }}"
+# DHCP Address Scopes
+dnsmasq_dhcp_scopes:
+  - start: '10.0.12.225'
+    end: '10.0.12.245'
+    netmask: '255.255.255.0'
+    lease_time: 24h
 
-# Define static ip reservations
+# DHCP Server Options
+dnsmasq_dhcp_options:
+  - option: 'dns-server'
+    value:
+      - '10.0.12.1'
+  - option: 'domain-name'
+    value:
+      - '{{ dnsmasq_pri_domain_name }}'
+  - option: 'domain-search'
+    value:
+      - '{{ dnsmasq_pri_domain_name }}'
+  - option: 'ntp-server'
+    value:
+      - '10.0.12.1'
+  - option: 'router'
+    value:
+      - '10.0.12.1'
+
+# DHCP Static Lease Mappings
 dnsmasq_dhcp_host_reservations:
   []
-  # - address:                       192.168.0.60
-  #   lease_time:                    1h
+  # - address: 10.0.12.100
+  #   lease_time: 1h
   #   mac_address:
   #     - "11:22:33:44:55:66" # Multiple MAC addresses may be assigned
-  #     # - "12:34:56:78:90:12"
-  #   name:                          fred
+  #     - "12:34:56:78:90:12"
+  #   name: static-lease-host1
 
-# Define DHCP options to set
-dnsmasq_dhcp_options:
+# Custom Domains
+dnsmasq_custom_domains:
   []
-  # - option:                        dns-server
-  #   value:
-  #     - 192.168.202.200
-  #     - 192.168.202.201
-  # # - option:                      domain-name
-  # #   value:
-  # #     - "another.{{ dnsmasq_pri_domain_name }}"
-  # - option:                        domain-search
-  #   value:
-  #     - "dev.{{ dnsmasq_pri_domain_name }}"
-  #     - "prod.{{ dnsmasq_pri_domain_name }}"
-  #     - "test.{{ dnsmasq_pri_domain_name }}"
-  # - option:                        ntp-server
-  #   value:
-  #     - 192.168.202.200
-  #     - 192.168.202.201
-  # - option:                        router
-  #   value:
-  #     - 192.168.202.1
-
-# Define dhcp scopes to be used if dhcp is enabled
-dnsmasq_dhcp_scopes:
-  []
-  # - start:                         192.168.1.128
-  #   end:                           192.168.1.224
-  #   netmask:                       255.255.255.0
-  #   lease_time:                    24h # Define a specific lease time if desired..Default is 1h
-  #   interface:                     eth0 # Define a specific interface to provide scope...not required but useful
-  # - start:                         192.168.2.128
-  #   end:                           192.168.2.224
-  #   netmask:                       255.255.255.0
-  #   lease_time:                    24h
-  #   interface:                     eth1
+  # - domain: "custom.{{ dnsmasq_pri_domain_name }}"
+  #   network:
+  #     - 192.168.0.0/24 # Define as subnet
+  #     - 192.168.0.100,192.168.1.100 # Define as range
 
 # Define your dns search
 dnsmasq_dns_search: "{{ dnsmasq_pri_domain_name }}"
