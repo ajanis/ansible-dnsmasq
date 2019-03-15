@@ -41,4 +41,3 @@
   become: true
   notify:
     - restart dnsmasq
-  when: _dnsmasq_resolv_conf_removed['changed']
