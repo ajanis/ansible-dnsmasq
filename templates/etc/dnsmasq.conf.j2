@@ -24,8 +24,10 @@ except-interface={{ item }}
 {% if not dnsmasq_forward_nonrouted_addresses %}
 bogus-priv
 {% endif %}
-{% if dnsmasq_pri_domain_name is defined %}
-domain={{ dnsmasq_pri_domain_name }}
+{% if dnsmasq_dns_search is defined %}
+{% for item in dnsmasq_dns_search %}
+domain={{ item }}
+{% endfor %}
 {% endif %}
 {% if dnsmasq_custom_domains is defined and dnsmasq_custom_domains != [] %}
 {%   for item in dnsmasq_custom_domains %}

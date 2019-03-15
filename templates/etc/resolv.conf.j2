@@ -1,3 +1,11 @@
 {{ ansible_managed|comment }}
-search {{ dnsmasq_dns_search }}
-nameserver 127.0.0.1:{{ dnsmasq_listen_port }}
+
+{% if dnsmasq_dns_search is defined %}
+search{% for item in dnsmasq_dns_search %} {{ item }}{% endfor %}
+{% endif %}
+
+{% if dnsmasq_enable_forwarders %}
+{%   for item in dnsmasq_nameservers %}
+nameserver {{ item }}
+{%   endfor %}
+{% endif %}
