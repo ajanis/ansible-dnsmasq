@@ -6,3 +6,11 @@
   become: true
   register: result
   until: result is succeeded
+
+- name: debian | Install nmap
+  apt:
+    name: nmap
+    state: present
+  become: true
+  register: result
+  until: result is succeeded
