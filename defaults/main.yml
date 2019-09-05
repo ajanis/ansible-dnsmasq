@@ -1,4 +1,7 @@
 ---
+dnsmasq_user: dnsmasq
+dnsmasq_group: nogroup
+
 # defaults file for ansible-dnsmasq
 
 # Define specific interfaces to listen on
